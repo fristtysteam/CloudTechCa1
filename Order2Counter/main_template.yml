@@ -1,3 +1,10 @@
+Parameters:
+
+  DeployBucketName:
+    Type: String
+    AllowedPattern : ".+"
+
+
 Resources:
 
   MenuBucket:
@@ -5,13 +12,10 @@ Resources:
   
   KitchenQueue:
     Type: AWS::SQS::Queue
-    Properties:
-      QueueName: gymq
 
   AuditTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: audit # name of table (can leave blank)
       BillingMode: PAY_PER_REQUEST
       AttributeDefinitions:
         -
@@ -19,7 +23,7 @@ Resources:
           AttributeType: S
       KeySchema:
         -
-          AttributeName: order_id # should be same as abov
+          AttributeName: order_id
           KeyType: HASH
   
   LambdaRole:
@@ -37,11 +41,35 @@ Resources:
         Version: 2012-10-17
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/AWSLambdaExecute
-        - arn:aws:iam::aws:policy/AmazonSQSFullAccess
-        - arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess
         - arn:aws:iam::aws:policy/AWSCloudFormationFullAccess
       Path: /          
 
+  RouterPolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: Order2CounterRouterPolicy
+      PolicyDocument:
+        Statement:
+        - Action:
+          - sqs:SendMessage
+          Effect: Allow
+          Resource: !GetAtt GymQueue.Arn
+        - Action:
+          - dynamodb:PutItem
+          Effect: Allow
+          Resource: !GetAtt AuditTable.Arn
+      Roles: [!Ref LambdaRole]
+
+
+  RouterFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Runtime: python3.12
+      Handler: router.handle_order
+      Role: !GetAtt LambdaRole.Arn
+      Code:
+        S3Bucket: !Ref DeployBucketName
+        S3Key: code.zip
           
 Outputs:
   menubucketname:
@@ -61,4 +89,7 @@ Outputs:
 
   rolearn:
     Value: !GetAtt LambdaRole.Arn
+
+  routerfunctionname:
+    Value: !Ref RouterFunction
     

@@ -1,9 +1,11 @@
 #!/usr/bin/env pwsh
 
-$StackName = "order2desk"
+$StackName = "order2Counter"
+$MainStack = "order2Counter"
+$DeployStack = "${StackName}deploy"
 
 Write-Host 'emptying bucket... ' -NoNewLine
-$BucketName=((aws cloudformation describe-stacks --stack order2desk | ConvertFrom-Json).Stacks[0].Outputs | Where-Object OutputKey -eq menubucketname)[0].OutputValue
+$BucketName=((aws cloudformation describe-stacks --stack $MainStack | ConvertFrom-Json).Stacks[0].Outputs | Where-Object OutputKey -eq menubucketname)[0].OutputValue
 aws s3 rm s3://$BucketName/menu.json
 Write-Host 'ok' -ForegroundColor Blue
 

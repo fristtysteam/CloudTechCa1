@@ -9,8 +9,8 @@ from argparse import ArgumentParser
 from common import *
 
 # arguments
-parser = ArgumentParser(description='order monitor for Gym example')
-parser.add_argument('--stack', help='stack name', default='order2desk')
+parser = ArgumentParser(description='order monitor for gym example')
+parser.add_argument('--stack', help='stack name', default='order2Counter')
 args = parser.parse_args()
 stack_name=args.stack
 
@@ -65,7 +65,8 @@ payload = {
     "item": chosen_item
     }
 
+function_name = cf_output(outputs, 'routerfunctionname')
 lambda_client = boto3.client('lambda')
-lambda_client.invoke(FunctionName='order2desk_handler',Payload=json.dumps(payload))
+lambda_client.invoke(FunctionName=function_name,Payload=json.dumps(payload))
 
 print("Your %s is on its way!" % chosen_item)

@@ -2,14 +2,16 @@
 menu = {
     'categories': [
         {
-            'name': 'Drinks',
-            'items': [ 'Tea', 'Coffee' ]
+            'name': 'Machines',
+            'items': [ 'ShoulderPress', 'BenchPress' ]
          },
         {
-            'name': 'Snacks',
-            'items': ['Brownie', 'Muffin' ]
+            'name': 'Drinks',
+            'items': ['Ryze', 'RedBull' ]
         }
         ]
     }
+
+
 import json
 print(json.dumps(menu))

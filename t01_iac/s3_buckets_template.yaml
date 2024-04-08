@@ -1,7 +1,0 @@
-Resources: # every template must have Resources
-
-  Bucket1: # logical name (in CF GUI and template only)
-    Type: AWS::S3::Bucket # list available on AWS guides
-    
-  Bucket2: # another resource
-    Type: AWS::S3::Bucket
