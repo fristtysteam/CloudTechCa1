@@ -14,11 +14,11 @@ $DeployBucketName=((aws cloudformation describe-stacks --stack $DeployStack | Co
 
 Write-Host 'creating main stack... ' -NoNewLine
 aws cloudformation create-stack --stack-name $MainStack --template-body file://main_template.yml --capabilities CAPABILITY_NAMED_IAM --parameters ParameterKey=DeployBucketName,ParameterValue=$DeployBucketName
-Write-Host 'ok' -ForegroundColor Green
+Write-Host 'ok' -ForegroundColor Blue
 
 Write-Host 'Waiting for main stack to create... ' -NoNewLine
 aws cloudformation wait stack-create-complete --stack-name $MainStack
-Write-Host 'ok' -ForegroundColor Green
+Write-Host 'ok' -ForegroundColor Blue
 
 
 ## UPLOAD THE MENU FILE
@@ -26,6 +26,6 @@ Write-Host 'ok' -ForegroundColor Green
 Write-Host 'Uploading initial menu...' -NoNewLine
 $BucketName=((aws cloudformation describe-stacks --stack order2desk | ConvertFrom-Json).Stacks[0].Outputs | Where-Object OutputKey -eq menubucketname)[0].OutputValue
 aws s3 cp menu.json s3://$BucketName/menu.json
-Write-Host 'done' -ForegroundColor Green
+Write-Host 'done' -ForegroundColor Blue
 
-Write-Host 'main stack is ready' -ForegroundColor Green
+Write-Host 'main stack is ready' -ForegroundColor Blue

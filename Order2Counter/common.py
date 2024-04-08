@@ -1,4 +1,3 @@
-# helper functions for cafe example
 
 import os
 

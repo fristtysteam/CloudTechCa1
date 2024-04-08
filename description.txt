@@ -1,0 +1,4 @@
+This project is a basic cloud System composed of Paas/Iaas Components.
+It takes information about a gym such as the machines in the gym and the drinks they sell.
+There is a main_teardown.ps1 that will tear down the system that has been build.
+The main theme im going for is blue so the menus will be suited in blue.

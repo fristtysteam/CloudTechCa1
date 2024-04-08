@@ -9,9 +9,9 @@ from argparse import ArgumentParser
 
 from common import *
 
-parser = ArgumentParser(description='order monitor for cafe example')
-parser.add_argument('--stack', help='stack name', default='order2desk')
-parser.add_argument('--wait', help='wait for making order', action='store_true', default=False)
+parser = ArgumentParser(description='order monitor for gym example')
+parser.add_argument('--stack', help='stack name', default='order2Counter')
+parser.add_argument('--wait', help='wait to book day', action='store_true', default=False)
 parser.add_argument('--debug', help='debug', action='store_true', default=False)
 args = parser.parse_args()
 stack_name=args.stack
@@ -21,7 +21,7 @@ queue_url = None
 cf_client = boto3.client('cloudformation')
 response = cf_client.describe_stacks(StackName=stack_name)
 outputs = response["Stacks"][0]["Outputs"]
-queue_url = cf_output(outputs, "kitchenqurl")
+queue_url = cf_output(outputs, "dumbellqurl")
 
 if queue_url is None:
     print("no queue URL found")
